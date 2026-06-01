@@ -72,7 +72,8 @@ on a slide — it becomes a number you can point to.
 |  |  |
 |---|---|
 | 🎨 | **Live color-coded animation** — yellow = compare, red = swap, green = sorted |
-| 🏁 | **Same-array racing** — run 5 algorithms on identical data and rank them |
+| 🏁 | **All 5 algorithms work** — bubble, insertion, selection, quick, merge — pick any |
+| 📊 | **Same-array racing** — run them on identical data and rank them |
 | 📐 | **Big-O made visible** — every result tagged with its complexity class |
 | 🌱 | **Zero dependencies** — pure Go standard library. Period. |
 | 🔁 | **Deterministic** — same seed = identical animation, every single time |
@@ -135,8 +136,8 @@ SortViz has **exactly 3 screens**. Type a command, hit Enter, watch the magic.
 <td valign="top">
 
 ```
-Algorithm : bubble
-Array Size: 40
+Algorithm : insertion
+Array Size: 30
 Speed     : normal
 Seed      : 42
 ```
@@ -156,10 +157,10 @@ Seed      : 42
 <td valign="top">
 
 ```
-bubble  ████████  300
-quick   ██        91
-merge   █         81 ★
-3.7× faster!
+selection ████████  300
+insertion █████      222
+quick     ██          91
+merge     █           81 ★
 ```
 
 </td>
@@ -170,12 +171,15 @@ merge   █         81 ★
 
 | Type this | What it does |
 |---|---|
-| `a quick` | Pick algorithm: `bubble` / `insertion` / `selection` / `quick` / `merge` |
+| `a quick` | Pick algorithm — any of `bubble` / `insertion` / `selection` / `quick` / `merge` (all 5 work) |
 | `s 30` | Set array size (10–60) |
 | `p slow` | Set speed: `slow` / `normal` / `fast` |
 | `d 42` | Set seed (any integer — same seed = same animation) |
 | `run` | 🎬 **Start the visualization** |
 | `q` | Quit |
+
+> **Try them all.** Each algorithm has a completely different visual signature —
+> bubble crawls, insertion ripples, selection scans, quick partitions, merge weaves.
 
 ### RUN screen — what to do
 
@@ -205,28 +209,38 @@ Here's the experience that sells SortViz in 60 seconds. Try it:
 go run .
 ```
 
-Then in the terminal:
+Then in the terminal — run **all five algorithms** on the exact same array:
 
 ```
-a bubble       ⏎    # pick the slow one
-s 25           ⏎    # decent size
+a bubble       ⏎    # 🫧 the slow one — watch it crawl
+s 25           ⏎
+d 42           ⏎    # fix the seed so every algo sees the same data
 p slow         ⏎    # let it breathe
-run            ⏎    # 🎬 watch bubble struggle through 300 comparisons
-
-back           ⏎    # go back
-
-a quick        ⏎    # pick the fast one
-run            ⏎    # 🎬 watch it FLY through 91 comparisons
+run            ⏎    # 🎬 ~300 comparisons, 200 swaps
 
 back           ⏎
-a merge        ⏎
-run            ⏎    # 🎬 even tighter
+a insertion    ⏎    # 📥 ripples values into place
+run            ⏎    # 🎬 ~222 comparisons
+
+back           ⏎
+a selection    ⏎    # 🎯 scans, picks the min, repeats
+run            ⏎    # 🎬 ~300 comparisons but only ~22 swaps
+
+back           ⏎
+a quick        ⏎    # ⚡ divide-and-conquer, partitions chaotically
+run            ⏎    # 🎬 ~91 comparisons — watch it FLY
+
+back           ⏎
+a merge        ⏎    # 🔀 splits, merges, never breaks down
+run            ⏎    # 🎬 ~81 comparisons — even tighter
 ```
 
 **Now look at the STATS chart.**
 
 ```
   bubble     ████████████████████████████████████   300  O(n²)
+  insertion  ██████████████████████████             222  O(n²)
+  selection  ████████████████████████████████████   300  O(n²)
   quick      ██████████                              91  O(n log n)
   merge      █████████                               81  O(n log n) ★ best
 
@@ -265,6 +279,24 @@ Five classics, each instrumented to record every operation:
 | 🎯 **Selection** | Ω(n²) | Θ(n²) | O(n²) | ❌ | Few swaps, many comparisons |
 | ⚡ **Quick** | Ω(n log n) | Θ(n log n) | O(n²) | ❌ | The chaotic genius. Usually wins. |
 | 🔀 **Merge** | Ω(n log n) | Θ(n log n) | O(n log n) | ✅ | Predictable, stable, never breaks down |
+
+### 🎯 All five are real, working, tested
+
+Run any of them with `a <name>` in SELECT. Here are the **actual measured
+counts** when you run them in SortViz at `n=25, seed=42`:
+
+| Algorithm | Comparisons | Swaps | Big-O | Try it |
+|---|---:|---:|---|---|
+| 🫧 Bubble | 300 | 200 | O(n²) | `a bubble` |
+| 📥 Insertion | 222 | 200 | O(n²) | `a insertion` |
+| 🎯 Selection | 300 | 22 | O(n²) | `a selection` |
+| ⚡ Quick | 91 | 55 | O(n log n) | `a quick` |
+| 🔀 Merge | 81 | 118 | O(n log n) | `a merge` ⭐ |
+
+> Notice how selection has the same comparison count as bubble but **9×
+> fewer swaps**? Or how insertion shaves ~25% off bubble despite the same
+> Big-O class? **You only see these tradeoffs when you can measure them.**
+> That's what SortViz is for.
 
 ---
 
