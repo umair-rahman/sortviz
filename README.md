@@ -1,15 +1,45 @@
-# SortViz
+# ⚡ SortViz
 
-A zero-dependency, terminal-based sorting algorithm visualizer written in pure Go.
-Watch sorting algorithms come alive as color-coded ASCII bars, then compare how
-they actually perform on the same data — all inside your terminal, in exactly 3 modes.
+> **Watch sorting algorithms fight it out — live, in your terminal.**
 
-> **Code Olympics 2026** submission by umair-rahman
-> Constraints: **3 states** · **≤650 lines** · **terminal Visual Creation** · **Go** · **zero external dependencies**
+```
+  SortViz · RUN  |  quick   comparisons: 91  swaps: 55   step 142/188
+
+  █                        █
+  █        █          █    █
+█ █ ██  █ ███   █ █   █  █ █
+█ ████  █████ ███ █   █  ███
+████████████████████ ████████
+─────────────────────────────
+  █ unsorted  █ comparing  █ swapping  █ sorted
+```
+
+A **zero-dependency** terminal sorting visualizer built in pure Go.
+Pick an algorithm, watch it sort in real time as color-coded ASCII bars,
+then see the hard numbers that prove *why* one algorithm crushes another.
+
+**No npm. No pip. No Docker. Just Go.**
 
 ---
 
-## Run
+## ✨ Why SortViz?
+
+Most sorting visualizers are heavy web apps that need a browser, an internet
+connection, and a dozen dependencies. SortViz needs **nothing** — clone it,
+run it, watch it work.
+
+- 🎯 **Real-time animation** — every compare, swap, and lock rendered live
+- 📊 **Same-array racing chart** — run 5 algorithms on identical data, see who wins
+- 🔢 **Big-O made tangible** — "merge is 3.7× faster than bubble" is more convincing than any textbook
+- 🌱 **Zero dependencies** — pure Go standard library, works offline, forever
+- 🔁 **Deterministic** — same seed = same animation, every single time
+- 💻 **Cross-platform** — Windows, Mac, Linux, one binary
+
+---
+
+## 🚀 Quick Start
+
+**Prerequisites:** [Go 1.21+](https://go.dev/dl/) installed
 
 ```bash
 git clone https://github.com/umair-rahman/sortviz.git
@@ -17,63 +47,93 @@ cd sortviz
 go run .
 ```
 
-Or build a single portable binary (no Go install needed on target machine):
+That's it. No `go get`. No config. No internet after clone.
+
+### Or build a portable binary
 
 ```bash
 go build -o sortviz .
-./sortviz          # Linux / Mac
-sortviz.exe        # Windows
+./sortviz        # Mac / Linux
+sortviz.exe      # Windows
 ```
 
-**Zero dependencies. One command. Instant visual.**
+Share the binary with anyone — they don't even need Go installed.
 
 ---
 
-## How It Works
+## 🎮 How to Use — Step by Step
 
-SortViz has exactly **3 modes**:
+### Step 1 — SELECT screen (configure your run)
 
-### Mode 1 — SELECT
-Configure your run, then type `run` to start.
-
-| Command | What it does |
-|---|---|
-| `a <name>` | set algorithm: `bubble` / `insertion` / `selection` / `quick` / `merge` |
-| `s <n>` | set array size (10–60) |
-| `p <speed>` | set speed: `slow` / `normal` / `fast` |
-| `d <seed>` | set seed (any integer — same seed = same animation every time) |
-| `run` | start the visualization |
-| `q` | quit |
-
-A live **array preview** is shown so you can see the shuffled data before sorting.
-
-### Mode 2 — RUN
-Watch the algorithm sort in real time as color-coded ASCII bars:
+When you launch SortViz, you land on the **SELECT** screen.
+Type a command and press **Enter**.
 
 ```
-  SortViz · RUN  |  quick   comparisons: 91  swaps: 55   step 142/188
+╔════════════════════════════════════════════════════╗
+║            SortViz  ·  SELECT MODE                 ║
+╠════════════════════════════════════════════════════╣
+║ Algorithm : bubble                                 ║
+║ Array Size: 40   (10–60)                           ║
+║ Speed     : normal                                 ║
+║ Seed      : 42                                     ║
+╚════════════════════════════════════════════════════╝
+```
+
+| Command | What it does | Example |
+|---|---|---|
+| `a <name>` | Choose algorithm | `a quick` |
+| `s <n>` | Set array size (10–60) | `s 30` |
+| `p <speed>` | Set animation speed | `p slow` |
+| `d <seed>` | Set seed (any integer) | `d 42` |
+| `run` | **Start the visualization** | `run` |
+| `q` | Quit | `q` |
+
+**Available algorithms:** `bubble` · `insertion` · `selection` · `quick` · `merge`
+
+**Tip:** A live **array preview** is shown below the menu so you can see
+the shuffled data before you start sorting.
+
+---
+
+### Step 2 — RUN screen (watch the magic)
+
+Type `run` and press Enter. The animation starts immediately.
+
+```
+  SortViz · RUN  |  bubble   comparisons: 156  swaps: 89   step 245/525
 
   █                      
   █        █             
+█ █ ██    ███            
 █ █ ██  █ ███   █ █      
-█ ████  █████ ███ █   █  
 ████████████████████ ████
 ─────────────────────────
   █ unsorted  █ comparing  █ swapping  █ sorted
 ```
 
+**Color guide:**
+
 | Color | Meaning |
 |---|---|
-| 🔵 Cyan | unsorted |
-| 🟡 Yellow | being compared |
-| 🔴 Red | being swapped / pivot |
-| 🟢 Green | locked in final position |
+| 🔵 Cyan | Unsorted — not touched yet |
+| 🟡 Yellow | Being **compared** right now |
+| 🔴 Red | Being **swapped** / current pivot |
+| 🟢 Green | **Sorted** — locked in final position |
 
-Press **Enter** to skip to the end. Press **q** to quit.
-Animation finishes → **STATS screen opens automatically**.
+**Controls during animation:**
 
-### Mode 3 — STATS
-See the metrics and a same-array comparison chart:
+| Key | Action |
+|---|---|
+| `Enter` | Skip to the end instantly |
+| `q` | Quit |
+
+> The animation finishes → **STATS screen opens automatically.** No key needed.
+
+---
+
+### Step 3 — STATS screen (the proof)
+
+After every run, SortViz shows you the numbers:
 
 ```
 ╔════════════════════════════════════════════════════╗
@@ -93,41 +153,138 @@ See the metrics and a same-array comparison chart:
   merge wins: 3.7× fewer comparisons than the slowest.
 ```
 
-Run multiple algorithms on the same seed to see the **O(n²) vs O(n log n)** gap as a real measured number.
+Every algorithm you run this session appears on the chart — **all on the same
+seeded array** — so the comparison is perfectly fair.
 
-| Command | What it does |
+| Command | Action |
 |---|---|
-| `back` | return to SELECT |
-| `q` | quit |
+| `back` | Return to SELECT (run another algorithm) |
+| `q` | Quit |
 
 ---
 
-## Algorithms
+## 🏆 The Full Experience (recommended first run)
 
-| Algorithm | Avg Complexity | Stable |
+Do this to see SortViz at its best:
+
+```
+# 1. Launch
+go run .
+
+# 2. In SELECT — set up
+a bubble        ← Enter
+s 25            ← Enter
+p slow          ← Enter
+run             ← Enter   (watch bubble struggle)
+
+# 3. In STATS — go back
+back            ← Enter
+
+# 4. Run quick sort on the SAME array
+a quick         ← Enter
+run             ← Enter   (watch it fly)
+
+# 5. In STATS — go back again
+back            ← Enter
+
+# 6. Run merge sort
+a merge         ← Enter
+run             ← Enter
+
+# 7. STATS now shows all three side by side
+# You'll see something like:
+#   bubble  ████████████████████  300  O(n²)
+#   quick   ██████                 91  O(n log n)
+#   merge   █████                  81  O(n log n) ★ best
+#   merge wins: 3.7× fewer comparisons
+```
+
+**This is the moment Big-O stops being theory and becomes a number you can see.**
+
+---
+
+## 📐 Algorithms
+
+| Algorithm | Best | Average | Worst | Stable | When to use |
+|---|---|---|---|---|---|
+| **Bubble** | Ω(n) | Θ(n²) | O(n²) | ✅ | Learning only |
+| **Insertion** | Ω(n) | Θ(n²) | O(n²) | ✅ | Small / nearly sorted data |
+| **Selection** | Ω(n²) | Θ(n²) | O(n²) | ❌ | Minimizing swaps |
+| **Quick** | Ω(n log n) | Θ(n log n) | O(n²) | ❌ | General purpose (fast) |
+| **Merge** | Ω(n log n) | Θ(n log n) | O(n log n) | ✅ | Guaranteed performance |
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│                  main.go  (FSM loop)                 │
+│   SELECT ──────► RUN ──────────────► STATS          │
+│      ▲                                  │            │
+│      └──────────── back ────────────────┘            │
+└──────────────────────┬──────────────────────────────┘
+                       │
+        ┌──────────────┼──────────────┐
+        ▼              ▼              ▼
+   sorts.go       render.go        ui.go
+  (5 algos +    (ASCII bars +    (screens +
+   recorder)     ANSI colors)     input)
+```
+
+**Key design decisions:**
+
+- **Record-then-replay** — algorithms run to completion first, recording every
+  compare/swap/lock as a `Step`. RUN mode replays on a `time.Ticker`.
+  Result: deterministic, flicker-free, decoupled from rendering.
+
+- **Zero dependencies** — ANSI colors are raw escape codes. Windows VT mode
+  is enabled via stdlib `syscall` (no external package needed).
+
+- **Exactly 3 modes** — `ModeSelect`, `ModeRun`, `ModeStats`. The enum in
+  `model.go` is the single source of truth. No fourth state exists.
+
+---
+
+## 🎯 Code Olympics 2026 — Constraint Compliance
+
+| Constraint | Requirement | Result |
 |---|---|---|
-| Bubble Sort | O(n²) | Yes |
-| Insertion Sort | O(n²) | Yes |
-| Selection Sort | O(n²) | No |
-| Quick Sort | O(n log n) | No |
-| Merge Sort | O(n log n) | Yes |
+| Simple-State Creator | Exactly 2–3 modes | ✅ **3 modes** (SELECT / RUN / STATS) |
+| Enterprise Creator | ≤ 650 lines | ✅ **619 / 650 lines** |
+| Visual Creation | ASCII art / terminal UI | ✅ Live bar chart + comparison chart |
+| Go | Pure Go | ✅ **Zero external dependencies** |
 
 ---
 
-## Design Highlights
+## 📁 Project Structure
 
-- **Record-then-replay engine** — algorithms run to completion first, recording every compare/swap/lock as a `Step`. RUN mode replays those steps on a `time.Ticker`. Same seed = identical animation every time (deterministic).
-- **Zero external dependencies** — all visuals are raw ANSI escape codes. Windows VT mode enabled via stdlib `syscall` (see `term_windows.go`).
-- **Exactly 3 modes** — the `Mode` enum in `model.go` is the single source of truth. No fourth state exists.
-- **619 / 650 lines** — well within the Enterprise Creator budget.
+```
+sortviz/
+├── main.go          ← FSM loop, animation engine, Ctrl-C handler
+├── model.go         ← Mode enum, Step, RunStats, AppState
+├── sorts.go         ← 5 instrumented sorting algorithms + recorder
+├── render.go        ← ASCII bar engine, ANSI colors, seeded array
+├── ui.go            ← SELECT / STATS screens, input parser
+├── term_windows.go  ← Windows VT processing (stdlib syscall)
+├── term_other.go    ← No-op for Mac/Linux
+├── sorts_test.go    ← Correctness + determinism tests
+└── go.mod           ← Module file (no require block)
+```
 
 ---
 
-## Constraint Compliance
+## 🧪 Run Tests
 
-| Constraint | Requirement | Status |
-|---|---|---|
-| Simple-State Creator | exactly 2–3 modes | ✅ 3 modes (SELECT / RUN / STATS) |
-| Enterprise Creator | ≤ 650 lines | ✅ 619 / 650 |
-| Visual Creation | ASCII art / terminal UI | ✅ live bar chart + comparison chart |
-| Go | pure Go | ✅ zero external dependencies |
+```bash
+go test ./...
+```
+
+Tests verify:
+- All 5 algorithms produce correctly sorted output (100 combinations)
+- Same seed always produces identical step counts (determinism)
+- O(n log n) algorithms do fewer comparisons than O(n²) on the same data
+
+---
+
+*Built with pure Go. No frameworks. No libraries. Just fundamentals.*
