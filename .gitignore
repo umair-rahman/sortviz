@@ -1,0 +1,7 @@
+# Built binaries
+/sortviz
+/sortviz.exe
+
+# Go test/coverage artifacts
+*.out
+*.test
